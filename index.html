@@ -51,6 +51,18 @@
       box-shadow: 0 0 20px #00ff0066, 0 0 40px #00ff0033;
     }
 
+    .start-hint {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #88aacc;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
     .play-btn:hover {
       background: #44ff44;
       box-shadow: 0 0 30px #00ff0099, 0 0 60px #00ff0066;
@@ -197,8 +209,17 @@
   <div class="hero">
     <h1>DRIVING SIMULATOR</h1>
     <p class="subtitle">A birds-eye-view slalom driving test</p>
-    <a href="dist/game.html" class="play-btn">Play Now</a>
+    <a href="dist/game.html" class="play-btn" id="play-btn">Play Now</a>
+    <p class="start-hint">Press Enter or Space to start</p>
   </div>
+  <script>
+    document.addEventListener('keydown', function(e) {
+      if (e.code === 'Enter' || e.code === 'Space') {
+        e.preventDefault();
+        document.getElementById('play-btn').click();
+      }
+    });
+  </script>
 
   <div class="sections">
     <h2>Controls</h2>

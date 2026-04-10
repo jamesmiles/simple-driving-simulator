@@ -4,7 +4,7 @@
   "description": "A simple birds-eye-view driving simulator built on pb-galaga engine patterns",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open /game.html",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",

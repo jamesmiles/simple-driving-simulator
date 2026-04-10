@@ -1,5 +1,4 @@
 import { defineConfig, Plugin } from 'vite';
-import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 /** Inline all JS into the HTML so the build works from file:// */
@@ -8,8 +7,11 @@ function inlineScript(): Plugin {
     name: 'inline-script',
     enforce: 'post',
     generateBundle(_, bundle) {
-      const htmlFile = bundle['index.html'];
-      if (!htmlFile || htmlFile.type !== 'asset') return;
+      // Find the HTML asset (could be index.html or game.html)
+      const htmlKey = Object.keys(bundle).find(k => k.endsWith('.html'));
+      if (!htmlKey) return;
+      const htmlFile = bundle[htmlKey];
+      if (htmlFile.type !== 'asset') return;
 
       let html = htmlFile.source as string;
 
@@ -35,6 +37,7 @@ export default defineConfig({
   build: {
     modulePreload: false,
     rollupOptions: {
+      input: resolve(__dirname, 'game.html'),
       output: {
         format: 'iife',
         inlineDynamicImports: true,

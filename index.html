@@ -7,24 +7,252 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #1a1a1a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: #0a0a1a;
+      color: #fff;
+      font-family: 'Courier New', monospace;
       min-height: 100vh;
-      overflow: hidden;
     }
-    #game-container {
-      position: relative;
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: radial-gradient(ellipse at center, #111122 0%, #0a0a1a 70%);
     }
-    canvas {
-      display: block;
-      border: 1px solid #333;
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: bold;
+      color: #ff8800;
+      text-shadow: 0 0 20px #ff880066, 0 0 40px #ff440033;
+      margin-bottom: 12px;
+      letter-spacing: 3px;
+    }
+
+    .hero .subtitle {
+      font-size: 16px;
+      color: #88aacc;
+      margin-bottom: 40px;
+    }
+
+    .play-btn {
+      display: inline-block;
+      padding: 16px 48px;
+      font-size: 24px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #000;
+      background: #00ff00;
+      border: none;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 20px #00ff0066, 0 0 40px #00ff0033;
+    }
+
+    .play-btn:hover {
+      background: #44ff44;
+      box-shadow: 0 0 30px #00ff0099, 0 0 60px #00ff0066;
+    }
+
+    .sections {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 20px 60px;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #ff8800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin: 40px 0 20px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    th {
+      text-align: left;
+      color: #888;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 6px 12px;
+      border-bottom: 1px solid #333;
+    }
+
+    td {
+      padding: 6px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #1a1a2a;
+    }
+
+    td:first-child {
+      color: #ccc;
+    }
+
+    td:nth-child(2) {
+      color: #44ff44;
+      font-weight: bold;
+    }
+
+    td:nth-child(3) {
+      color: #666;
+    }
+
+    .note {
+      color: #888;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .scoring-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .scoring-list li {
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #1a1a2a;
+    }
+
+    .scoring-list .points {
+      font-weight: bold;
+      display: inline-block;
+      width: 80px;
+    }
+
+    .scoring-list .positive { color: #44ff44; }
+    .scoring-list .negative { color: #ff4444; }
+    .scoring-list .crash { color: #ff8844; }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 4px 16px;
+    }
+
+    .config-grid dt {
+      color: #44aaff;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 6px 0;
+    }
+
+    .config-grid dd {
+      color: #aaa;
+      font-size: 13px;
+      padding: 6px 0;
+      border-bottom: 1px solid #1a1a2a;
+    }
+
+    .engine-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 32px;
+      margin-top: 12px;
+    }
+
+    .engine-info dt {
+      color: #666;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .engine-info dd {
+      color: #44ff44;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px 20px;
+      border-top: 1px solid #222;
+      color: #444;
+      font-size: 12px;
+    }
+
+    .footer a {
+      color: #666;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: #ff8800;
     }
   </style>
 </head>
 <body>
-  <div id="game-container"></div>
-  <script type="module" src="/src/main.ts"></script>
+  <div class="hero">
+    <h1>DRIVING SIMULATOR</h1>
+    <p class="subtitle">A birds-eye-view slalom driving test</p>
+    <a href="dist/game.html" class="play-btn">Play Now</a>
+  </div>
+
+  <div class="sections">
+    <h2>Controls</h2>
+    <table>
+      <tr><th>Action</th><th>Key</th><th>Range</th></tr>
+      <tr><td>Throttle Up</td><td>=</td><td>0 &ndash; 10</td></tr>
+      <tr><td>Throttle Down</td><td>-</td><td>0 &ndash; 10</td></tr>
+      <tr><td>Brake Up</td><td>A</td><td>0 &ndash; 5</td></tr>
+      <tr><td>Brake Down</td><td>Z</td><td>0 &ndash; 5</td></tr>
+      <tr><td>Steer Left</td><td>&larr;</td><td>-10 to 10</td></tr>
+      <tr><td>Steer Right</td><td>&rarr;</td><td>-10 to 10</td></tr>
+      <tr><td>Restart</td><td>R</td><td>&mdash;</td></tr>
+    </table>
+    <p class="note">All controls are tap-to-set &mdash; each press adjusts the value by 1 step. Steering stays at the set angle until changed.</p>
+
+    <h2>Scoring</h2>
+    <ul class="scoring-list">
+      <li><span class="points positive">+10</span> Pass through a gate (between consecutive cones)</li>
+      <li><span class="points negative">-10</span> Hit a cone (also voids the next gate)</li>
+      <li><span class="points crash">FAIL</span> Drive off the road</li>
+    </ul>
+    <p class="note">Weave between the centre-line cones to collect gates and maximise your score. Reach the chequered finish line to complete the course.</p>
+
+    <h2>Vehicle Configuration</h2>
+    <dl class="config-grid">
+      <dt>Power</dt>
+      <dd>Affects acceleration rate &mdash; higher power reaches target speed faster</dd>
+      <dt>Weight</dt>
+      <dd>Affects braking performance &mdash; heavier vehicles carry more momentum and brake slower</dd>
+      <dt>Turning Circle</dt>
+      <dd>Affects steering responsiveness &mdash; higher values give tighter, more responsive turns</dd>
+    </dl>
+    <p class="note">Default configuration: Power 5, Weight 5, Turning Circle 5. The throttle sets a target speed (each level = 15 px/s), and the vehicle accelerates toward it based on power.</p>
+
+    <h2>The Engine</h2>
+    <p class="note">Built on <a href="https://github.com/jamesmiles/pb-galaga" style="color: #44aaff;">pb-galaga</a> engine patterns &mdash; decoupled game logic and rendering for clean architecture and headless testing.</p>
+    <dl class="engine-info">
+      <dt>Language</dt>
+      <dd>TypeScript (strict mode)</dd>
+      <dt>Rendering</dt>
+      <dd>Canvas 2D &mdash; no framework</dd>
+      <dt>Audio</dt>
+      <dd>Procedural synthesis (Web Audio API)</dd>
+      <dt>Physics</dt>
+      <dd>60 Hz fixed timestep with interpolation</dd>
+      <dt>Build</dt>
+      <dd>15 KB single-file &mdash; zero runtime dependencies</dd>
+      <dt>Testing</dt>
+      <dd>75 unit tests (Vitest, headless)</dd>
+    </dl>
+  </div>
+
+  <div class="footer">
+    <a href="https://github.com/jamesmiles/simple-driving-simulator">GitHub</a>
+  </div>
 </body>
 </html>

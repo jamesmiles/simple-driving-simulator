@@ -19,44 +19,23 @@ function drawCones(ctx: CanvasRenderingContext2D, state: GameState): void {
     const { x, y } = cone.position;
 
     if (cone.hit) {
-      // Knocked-over cone — flat, dimmed
-      ctx.fillStyle = '#884422';
-      ctx.globalAlpha = 0.4;
+      // Knocked-over cone — dimmed red circle
+      ctx.fillStyle = '#cc000044';
       ctx.beginPath();
-      // Deterministic rotation based on cone id
-      const tilt = (cone.id * 1.7) % 1.0;
-      ctx.ellipse(x, y, cone.radius, cone.radius * 0.6, tilt, 0, Math.PI * 2);
+      ctx.arc(x, y, cone.radius, 0, Math.PI * 2);
       ctx.fill();
-      ctx.globalAlpha = 1;
     } else {
-      // Standing cone (witch's hat) — orange with white stripe
-      // Base shadow
-      ctx.fillStyle = '#00000033';
+      // Standing cone — bright red triangle
+      ctx.fillStyle = '#ff0000';
+      ctx.strokeStyle = '#990000';
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.ellipse(x + 2, y + 2, cone.radius + 1, cone.radius * 0.5 + 1, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Cone body (triangle from top)
-      ctx.fillStyle = '#ff6600';
-      ctx.beginPath();
-      ctx.moveTo(x, y - cone.radius * 1.4);          // tip
-      ctx.lineTo(x - cone.radius, y + cone.radius * 0.4);  // bottom left
-      ctx.lineTo(x + cone.radius, y + cone.radius * 0.4);  // bottom right
+      ctx.moveTo(x, y - cone.radius * 1.4);
+      ctx.lineTo(x - cone.radius, y + cone.radius * 0.5);
+      ctx.lineTo(x + cone.radius, y + cone.radius * 0.5);
       ctx.closePath();
       ctx.fill();
-
-      // White reflective stripe
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      const stripeY = y - cone.radius * 0.3;
-      const stripeHalfW = cone.radius * 0.55;
-      ctx.fillRect(x - stripeHalfW, stripeY, stripeHalfW * 2, 3);
-
-      // Base
-      ctx.fillStyle = '#ff8833';
-      ctx.beginPath();
-      ctx.ellipse(x, y + cone.radius * 0.4, cone.radius, cone.radius * 0.35, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.stroke();
     }
   }
 }
@@ -82,7 +61,7 @@ function drawFinishLine(ctx: CanvasRenderingContext2D, state: GameState): void {
   }
 
   // "FINISH" text
-  ctx.fillStyle = '#ffff00';
+  ctx.fillStyle = '#000000';
   ctx.font = 'bold 18px monospace';
   ctx.textAlign = 'center';
   ctx.fillText('FINISH', fl.x + fl.width / 2, fl.y - rows * squareSize - 8);

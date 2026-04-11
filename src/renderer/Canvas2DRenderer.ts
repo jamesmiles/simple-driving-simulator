@@ -39,7 +39,7 @@ export class Canvas2DRenderer {
     const cam = current.camera;
 
     // Clear
-    ctx.fillStyle = '#3a3a3a';
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
     // Draw road surface
@@ -90,8 +90,8 @@ export class Canvas2DRenderer {
   }
 
   private drawRoad(ctx: CanvasRenderingContext2D, cam: CameraState): void {
-    // Asphalt background
-    ctx.fillStyle = '#555555';
+    // White road background
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
     // World-space X positions converted to screen
@@ -99,9 +99,8 @@ export class Canvas2DRenderer {
     const leftEdge = 100 - cam.worldX;
     const rightEdge = 700 - cam.worldX;
 
-    // Road markings — dashed center line
-    // Offset the dash pattern by camera Y so dashes stay fixed in world space
-    ctx.strokeStyle = '#ffffff44';
+    // Dashed center line — black
+    ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
     ctx.setLineDash([20, 30]);
     ctx.lineDashOffset = cam.worldY;
@@ -114,8 +113,8 @@ export class Canvas2DRenderer {
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
 
-    // Road edge lines
-    ctx.strokeStyle = '#ffffff22';
+    // Road edge lines — solid black
+    ctx.strokeStyle = '#000000';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(leftEdge, 0);

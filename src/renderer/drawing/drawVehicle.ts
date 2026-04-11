@@ -1,8 +1,8 @@
 import { VEHICLE_LENGTH, VEHICLE_WIDTH } from '../../engine/constants';
 
 /**
- * Draw the vehicle as a top-down car shape.
- * Position is in world coordinates (ctx already translated).
+ * Draw the vehicle as a simple bright green shape with "CAR" label.
+ * High-contrast for machine vision. Position is in world coordinates.
  */
 export function drawVehicle(
   ctx: CanvasRenderingContext2D,
@@ -12,18 +12,17 @@ export function drawVehicle(
 ): void {
   ctx.save();
   ctx.translate(x, y);
-  // Canvas rotation: heading PI/2 (north) should point up (-Y)
-  // Canvas 0 = right, so rotate by -(heading - PI/2) = PI/2 - heading
   ctx.rotate(-(heading - Math.PI / 2));
 
   const halfL = VEHICLE_LENGTH / 2;
   const halfW = VEHICLE_WIDTH / 2;
-
-  // Car body
-  ctx.fillStyle = '#2266cc';
-  ctx.beginPath();
-  // Rounded rectangle body
   const r = 4;
+
+  // Bright green filled body
+  ctx.fillStyle = '#00ff00';
+  ctx.strokeStyle = '#008800';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
   ctx.moveTo(-halfW + r, -halfL);
   ctx.lineTo(halfW - r, -halfL);
   ctx.arcTo(halfW, -halfL, halfW, -halfL + r, r);
@@ -35,32 +34,25 @@ export function drawVehicle(
   ctx.arcTo(-halfW, -halfL, -halfW + r, -halfL, r);
   ctx.closePath();
   ctx.fill();
+  ctx.stroke();
 
-  // Windshield
-  ctx.fillStyle = '#88bbff';
-  ctx.fillRect(-halfW + 3, -halfL + 4, VEHICLE_WIDTH - 6, 10);
-
-  // Rear window
-  ctx.fillStyle = '#6699cc';
-  ctx.fillRect(-halfW + 4, halfL - 12, VEHICLE_WIDTH - 8, 8);
+  // "CAR" label
+  ctx.fillStyle = '#000000';
+  ctx.font = 'bold 10px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('CAR', 0, 0);
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
 
   // Direction indicator (front arrow)
-  ctx.fillStyle = '#ffcc00';
+  ctx.fillStyle = '#000000';
   ctx.beginPath();
   ctx.moveTo(0, -halfL - 6);
   ctx.lineTo(-4, -halfL);
   ctx.lineTo(4, -halfL);
   ctx.closePath();
   ctx.fill();
-
-  // Wheels
-  ctx.fillStyle = '#222';
-  // Front wheels
-  ctx.fillRect(-halfW - 2, -halfL + 5, 4, 8);
-  ctx.fillRect(halfW - 2, -halfL + 5, 4, 8);
-  // Rear wheels
-  ctx.fillRect(-halfW - 2, halfL - 13, 4, 8);
-  ctx.fillRect(halfW - 2, halfL - 13, 4, 8);
 
   ctx.restore();
 }

@@ -12,76 +12,85 @@ export function drawHUD(
   renderFps: number,
 ): void {
   const v = state.vehicle;
-  const cfg = state.config;
 
   // Background panel (bottom)
   ctx.fillStyle = '#000000cc';
-  ctx.fillRect(0, GAME_HEIGHT - 100, GAME_WIDTH, 100);
+  ctx.fillRect(0, GAME_HEIGHT - 80, GAME_WIDTH, 80);
 
   // Divider line
   ctx.strokeStyle = '#444';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(0, GAME_HEIGHT - 100);
-  ctx.lineTo(GAME_WIDTH, GAME_HEIGHT - 100);
+  ctx.moveTo(0, GAME_HEIGHT - 80);
+  ctx.lineTo(GAME_WIDTH, GAME_HEIGHT - 80);
   ctx.stroke();
 
-  const baseY = GAME_HEIGHT - 85;
-  ctx.font = '13px monospace';
+  const labelY = GAME_HEIGHT - 65;
+  const valueY = GAME_HEIGHT - 28;
 
-  // Column 1: Controls
-  const col1 = 15;
+  // Throttle
+  const col1 = 30;
+  ctx.textAlign = 'center';
+
   ctx.fillStyle = '#88ff88';
-  ctx.fillText('THROTTLE', col1, baseY);
-  drawBar(ctx, col1, baseY + 5, v.throttle, 10, '#00cc44');
+  ctx.font = '11px monospace';
+  ctx.fillText('THROTTLE', col1 + 30, labelY);
 
-  ctx.fillStyle = '#ff8888';
-  ctx.fillText('BRAKE', col1, baseY + 35);
-  drawBar(ctx, col1, baseY + 40, v.brake, 5, '#cc4444');
+  ctx.fillStyle = '#00ff44';
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText(`${v.throttle}`, col1 + 30, valueY);
 
-  // Column 2: Steering
+  // Brake
   const col2 = 160;
+  ctx.fillStyle = '#ff8888';
+  ctx.font = '11px monospace';
+  ctx.fillText('BRAKE', col2 + 20, labelY);
+
+  ctx.fillStyle = '#ff4444';
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText(`${v.brake}`, col2 + 20, valueY);
+
+  // Steering
+  const col3 = 290;
   ctx.fillStyle = '#88ccff';
-  ctx.fillText('STEERING', col2, baseY);
-  drawSteeringIndicator(ctx, col2, baseY + 20, v.steering);
-
-  ctx.fillStyle = '#aaaaaa';
   ctx.font = '11px monospace';
-  ctx.fillText(`Angle: ${v.steering.toFixed(1)}`, col2, baseY + 50);
+  ctx.fillText('STEER', col3 + 20, labelY);
 
-  // Column 3: Speed
-  const col3 = 330;
-  ctx.font = '13px monospace';
+  ctx.fillStyle = '#44aaff';
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText(`${v.steering}`, col3 + 20, valueY);
+
+  // Speed
+  const col4 = 430;
   ctx.fillStyle = '#ffcc44';
-  ctx.fillText('SPEED', col3, baseY);
+  ctx.font = '11px monospace';
+  ctx.fillText('SPEED', col4 + 20, labelY);
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 24px monospace';
-  ctx.fillText(`${Math.round(v.speed)}`, col3, baseY + 30);
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText(`${Math.round(v.speed)}`, col4 + 20, valueY);
 
-  ctx.fillStyle = '#888';
-  ctx.font = '11px monospace';
-  ctx.fillText('px/s', col3 + 60, baseY + 30);
-
-  // Column 4: Config
-  const col4 = 470;
-  ctx.font = '11px monospace';
-  ctx.fillStyle = '#888888';
-  ctx.fillText(`PWR: ${cfg.power}  WGT: ${cfg.weight}  TRN: ${cfg.turningCircle}`, col4, baseY);
-
-  // Column 5: Score
-  const col5 = 660;
-  ctx.font = '13px monospace';
+  // Score
+  const col5 = 570;
   ctx.fillStyle = '#ffff00';
-  ctx.fillText('SCORE', col5, baseY);
+  ctx.font = '11px monospace';
+  ctx.fillText('SCORE', col5 + 20, labelY);
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 22px monospace';
-  ctx.fillText(`${state.score}`, col5, baseY + 30);
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText(`${state.score}`, col5 + 20, valueY);
 
+  // Cones Hit
+  const col6 = 710;
   ctx.fillStyle = '#ff6666';
   ctx.font = '11px monospace';
-  ctx.fillText(`Cones: ${state.conesHit}`, col5, baseY + 50);
+  ctx.fillText('CONES', col6 + 20, labelY);
+
+  ctx.fillStyle = '#ff4444';
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText(`${state.conesHit}`, col6 + 20, valueY);
+
+  ctx.textAlign = 'left';
 
   // FPS (top-left)
   ctx.font = '10px monospace';
@@ -102,59 +111,4 @@ export function drawHUD(
   ctx.textAlign = 'right';
   ctx.fillText(helpText, GAME_WIDTH - 5, 12);
   ctx.textAlign = 'left';
-}
-
-function drawBar(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  value: number,
-  max: number,
-  color: string,
-): void {
-  const barW = 100;
-  const barH = 12;
-
-  // Background
-  ctx.fillStyle = '#333';
-  ctx.fillRect(x, y, barW, barH);
-
-  // Fill
-  ctx.fillStyle = color;
-  ctx.fillRect(x, y, (value / max) * barW, barH);
-
-  // Value text
-  ctx.fillStyle = '#fff';
-  ctx.font = '10px monospace';
-  ctx.fillText(`${value}/${max}`, x + barW + 5, y + 10);
-}
-
-function drawSteeringIndicator(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  steering: number,
-): void {
-  const width = 120;
-  const height = 14;
-  const centerX = x + width / 2;
-
-  // Background track
-  ctx.fillStyle = '#333';
-  ctx.fillRect(x, y, width, height);
-
-  // Center mark
-  ctx.fillStyle = '#666';
-  ctx.fillRect(centerX - 1, y, 2, height);
-
-  // Steering position indicator
-  const indicatorX = centerX + (steering / 10) * (width / 2);
-  ctx.fillStyle = '#44aaff';
-  ctx.fillRect(indicatorX - 4, y - 1, 8, height + 2);
-
-  // Labels
-  ctx.fillStyle = '#666';
-  ctx.font = '8px monospace';
-  ctx.fillText('L', x - 8, y + 10);
-  ctx.fillText('R', x + width + 3, y + 10);
 }

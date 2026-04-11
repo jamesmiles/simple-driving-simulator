@@ -61,35 +61,37 @@ export function drawHUD(
   const steerText = v.steering > 0 ? `+${v.steering}` : `${v.steering}`;
   ctx.fillText(steerText, col3 + 20, valueY);
 
+  // Compass (heading)
+  const col4 = 420;
+  ctx.fillStyle = '#cc88ff';
+  ctx.font = '11px monospace';
+  ctx.fillText('HEADING', col4 + 30, labelY);
+
+  const bearing = headingToBearing(v.heading);
+  const cardinal = bearingToCardinal(bearing);
+  ctx.fillStyle = '#aa66ff';
+  ctx.font = 'bold 24px monospace';
+  ctx.fillText(`${cardinal} ${String(bearing).padStart(3, '0')}°`, col4 + 30, valueY);
+
   // Speed
-  const col4 = 430;
+  const col5 = 570;
   ctx.fillStyle = '#ffcc44';
   ctx.font = '11px monospace';
-  ctx.fillText('SPEED', col4 + 20, labelY);
+  ctx.fillText('SPEED', col5 + 20, labelY);
 
   ctx.fillStyle = '#ffffff';
   ctx.font = 'bold 28px monospace';
-  ctx.fillText(`${Math.round(v.speed)}`, col4 + 20, valueY);
+  ctx.fillText(`${Math.round(v.speed)}`, col5 + 20, valueY);
 
   // Score
-  const col5 = 570;
+  const col6 = 710;
   ctx.fillStyle = '#ffff00';
   ctx.font = '11px monospace';
-  ctx.fillText('SCORE', col5 + 20, labelY);
+  ctx.fillText('SCORE', col6 + 20, labelY);
 
   ctx.fillStyle = '#ffffff';
   ctx.font = 'bold 28px monospace';
-  ctx.fillText(`${state.score}`, col5 + 20, valueY);
-
-  // Cones Hit
-  const col6 = 710;
-  ctx.fillStyle = '#ff6666';
-  ctx.font = '11px monospace';
-  ctx.fillText('CONES', col6 + 20, labelY);
-
-  ctx.fillStyle = '#ff4444';
-  ctx.font = 'bold 28px monospace';
-  ctx.fillText(`${state.conesHit}`, col6 + 20, valueY);
+  ctx.fillText(`${state.score}`, col6 + 20, valueY);
 
   ctx.textAlign = 'left';
 
@@ -112,4 +114,21 @@ export function drawHUD(
   ctx.textAlign = 'right';
   ctx.fillText(helpText, GAME_WIDTH - 5, 12);
   ctx.textAlign = 'left';
+}
+
+/**
+ * Convert vehicle heading (radians, PI/2 = north) to compass bearing (0-359°).
+ * Bearing: 0 = N, 90 = E, 180 = S, 270 = W.
+ */
+function headingToBearing(heading: number): number {
+  let deg = (Math.PI / 2 - heading) * (180 / Math.PI);
+  deg = ((deg % 360) + 360) % 360;
+  return Math.round(deg);
+}
+
+/** Convert bearing (0-359°) to cardinal label (N, NE, E, SE, S, SW, W, NW). */
+function bearingToCardinal(bearing: number): string {
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const index = Math.round(bearing / 45) % 8;
+  return dirs[index];
 }

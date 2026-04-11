@@ -58,7 +58,8 @@ export function drawHUD(
 
   ctx.fillStyle = '#44aaff';
   ctx.font = 'bold 28px monospace';
-  ctx.fillText(`${v.steering}`, col3 + 20, valueY);
+  const steerText = v.steering > 0 ? `+${v.steering}` : `${v.steering}`;
+  ctx.fillText(steerText, col3 + 20, valueY);
 
   // Speed
   const col4 = 430;
